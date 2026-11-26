@@ -126,6 +126,22 @@
 .world:after{opacity:.10!important;}
 #giftlayer .gift{z-index:4;}
 .player{z-index:6;}
+
+/* V15 — force the family NPC layer above the illustrated map and gifts */
+#npcLayer{position:absolute!important;inset:0!important;display:block!important;z-index:20!important;visibility:visible!important;opacity:1!important;overflow:visible!important;pointer-events:none!important}
+#npcLayer .npc{position:absolute!important;display:flex!important;visibility:visible!important;opacity:1!important;z-index:21!important;pointer-events:auto!important;background:transparent!important;color:inherit!important;border:0!important;padding:0!important;margin:0!important;overflow:visible!important;filter:drop-shadow(0 5px 4px #14283b66)!important}
+#npcLayer .npc.dog{width:94px!important;height:92px!important}
+#npcLayer .npc.child{width:68px!important;height:108px!important}
+#npcLayer .npc img{display:block!important;visibility:visible!important;opacity:1!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:contain!important;object-position:center bottom!important}
+#npcLayer .npc-label{position:relative!important;display:block!important;visibility:visible!important;opacity:1!important;z-index:23!important;margin-top:2px!important}
+#npcLayer .npc-bubble{z-index:24!important}
+/* Place characters in clear spaces on the new illustrated map */
+#npcLayer #npc-aiko{left:82px!important;top:230px!important}
+#npcLayer #npc-tsuki{left:590px!important;top:510px!important}
+#npcLayer #npc-nala{left:135px!important;top:790px!important}
+#npcLayer #npc-ellioth{left:310px!important;top:490px!important}
+#npcLayer #npc-abbygaelle{left:455px!important;top:535px!important}
+
 </style></head><body><main class="app"><div class="topbar"><div class="brand">❄ L'hiver de notre amour</div><div class="top-actions"><button class="smallbtn" id="reset">↻ Réinitialiser</button><button class="smallbtn" id="help">?</button></div></div>
 <header class="hero"><div class="eyebrow">Une aventure de Noël rien qu'à toi</div><h1>Le village enchanté</h1><p>Explore les chemins enneigés, approche-toi des cadeaux et relève les défis pour découvrir tes surprises. ❤️</p><div class="progressbox"><div class="progress"><div id="progressfill"></div></div><div class="progresslabel" id="progresslabel">0 / 24 cadeaux trouvés</div></div></header>
 <section class="mapframe" id="mapframe"><div class="mapviewport"><div class="world" id="world"><div id="giftlayer"></div><div id="npcLayer" aria-label="Habitants du village"></div><div class="player dir-down" id="player" aria-label="Personnage"><img id="player-sprite" alt="" draggable="false"></div></div></div><div class="maptip" id="maptip">Déplace-toi avec les flèches. Approche un cadeau puis touche « Ouvrir ».</div></section>
@@ -149,7 +165,7 @@ const npcData=[
  {id:'ellioth',name:'Ellioth',type:'child',x:310,y:490,img:'npc-ellioth.png',talk:'Ellioth : « Tu as vu les cadeaux ? Il paraît qu’il y en a un caché tout près du lac ! » 🎁'},
  {id:'abbygaelle',name:'Abbygaëlle',type:'child',x:455,y:535,img:'npc-abbygaelle.png',talk:'Abbygaëlle : « J’adore les lumières du village… et les surprises de Noël ! » ✨'}
 ];
-function renderNPCs(){const npcLayer=$('#npcLayer');npcLayer.innerHTML='';npcData.forEach(n=>{const b=document.createElement('button');b.type='button';b.className='npc '+n.type;b.style.left=n.x+'px';b.style.top=n.y+'px';b.setAttribute('aria-label','Parler à '+n.name);b.title='Interagir avec '+n.name;const img=document.createElement('img');img.src='./assets/'+n.img;img.alt=n.name;img.draggable=false;const label=document.createElement('span');label.className='npc-label';label.textContent=n.name;const bubble=document.createElement('span');bubble.className='npc-bubble';bubble.textContent=n.talk;b.append(img,label,bubble);b.addEventListener('click',e=>{e.stopPropagation();npcLayer.querySelectorAll('.npc.talking').forEach(el=>el.classList.remove('talking'));b.classList.add('talking');$('#maptip').textContent=n.talk;window.clearTimeout(b._talkTimer);b._talkTimer=window.setTimeout(()=>b.classList.remove('talking'),4500)});npcLayer.appendChild(b)})}
+function renderNPCs(){const npcLayer=$('#npcLayer');npcLayer.innerHTML='';npcData.forEach(n=>{const b=document.createElement('button');b.type='button';b.id='npc-'+n.id;b.className='npc '+n.type;b.style.left=n.x+'px';b.style.top=n.y+'px';b.setAttribute('aria-label','Parler à '+n.name);b.title='Interagir avec '+n.name;const img=document.createElement('img');img.src='./assets/'+n.img;img.alt=n.name;img.draggable=false;const label=document.createElement('span');label.className='npc-label';label.textContent=n.name;const bubble=document.createElement('span');bubble.className='npc-bubble';bubble.textContent=n.talk;b.append(img,label,bubble);b.addEventListener('click',e=>{e.stopPropagation();npcLayer.querySelectorAll('.npc.talking').forEach(el=>el.classList.remove('talking'));b.classList.add('talking');$('#maptip').textContent=n.talk;window.clearTimeout(b._talkTimer);b._talkTimer=window.setTimeout(()=>b.classList.remove('talking'),4500)});npcLayer.appendChild(b)})}
 renderNPCs();
 const giftPos=[[135,220],[240,250],[285,360],[470,370],[620,380],[90,450],[190,500],[280,580],[460,580],[610,600],[110,700],[230,800],[365,820],[520,810],[660,820],[80,100],[250,170],[420,180],[580,160],[680,460],[170,650],[530,650],[360,240],[640,700]];
 function allowedDay(){if(preview)return 24;let n=new Date();return n.getMonth()===11?n.getDate():0}
