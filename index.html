@@ -135,12 +135,18 @@
 #npcLayer .npc img{display:block!important;visibility:visible!important;opacity:1!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:contain!important;object-position:center bottom!important}
 #npcLayer .npc-label{position:relative!important;display:block!important;visibility:visible!important;opacity:1!important;z-index:23!important;margin-top:2px!important}
 #npcLayer .npc-bubble{z-index:24!important}
+/* V16 — villagers grounded to the map: smaller sprites, ground shadows, no hover-float */
+#npcLayer .npc{animation:npcIdle 3.4s ease-in-out infinite!important;transform-origin:center bottom!important;filter:drop-shadow(0 2px 2px #14283b33)!important}
+#npcLayer .npc:before{content:"";position:absolute;left:18%;right:18%;bottom:18px;height:10px;border-radius:50%;background:rgba(25,43,58,.26);filter:blur(3px);z-index:0;pointer-events:none}
+#npcLayer .npc img{position:relative;z-index:1;object-position:center bottom!important}
+#npcLayer .npc-label{position:absolute!important;bottom:-18px!important;left:50%;transform:translateX(-50%)!important;z-index:3!important;margin:0!important}
+#npcLayer .npc-bubble{bottom:calc(100% + 12px)!important}
+#npcLayer .npc.dog{width:78px!important;height:76px!important}
+#npcLayer .npc.child{width:52px!important;height:88px!important}
+@keyframes npcIdle{0%,100%{translate:0 0}50%{translate:0 -1px}}
+@media(max-width:390px){#npcLayer .npc.dog{width:68px!important;height:66px!important}#npcLayer .npc.child{width:46px!important;height:78px!important}}
 /* Place characters in clear spaces on the new illustrated map */
-#npcLayer #npc-aiko{left:82px!important;top:230px!important}
-#npcLayer #npc-tsuki{left:590px!important;top:510px!important}
-#npcLayer #npc-nala{left:135px!important;top:790px!important}
-#npcLayer #npc-ellioth{left:310px!important;top:490px!important}
-#npcLayer #npc-abbygaelle{left:455px!important;top:535px!important}
+/* V16 positions are supplied by npcData; no CSS overrides */
 
 </style></head><body><main class="app"><div class="topbar"><div class="brand">❄ L'hiver de notre amour</div><div class="top-actions"><button class="smallbtn" id="reset">↻ Réinitialiser</button><button class="smallbtn" id="help">?</button></div></div>
 <header class="hero"><div class="eyebrow">Une aventure de Noël rien qu'à toi</div><h1>Le village enchanté</h1><p>Explore les chemins enneigés, approche-toi des cadeaux et relève les défis pour découvrir tes surprises. ❤️</p><div class="progressbox"><div class="progress"><div id="progressfill"></div></div><div class="progresslabel" id="progresslabel">0 / 24 cadeaux trouvés</div></div></header>
@@ -159,20 +165,21 @@ function stopAvatarWalk(){if(walkRAF){cancelAnimationFrame(walkRAF);walkRAF=0;}l
 playerSprite.onerror=()=>{player.classList.add('avatar-fallback');player.innerHTML='👩🏻‍🦰';};avatarSrc('down',0);
 // V14: 3 huskies and 2 children, clickable for a little interaction.
 const npcData=[
- {id:'aiko',name:'Aiko',type:'dog',x:82,y:230,img:'npc-aiko.png',talk:'Aiko remue la queue et vient réclamer une caresse. 🐾'},
- {id:'tsuki',name:'Tsuki',type:'dog',x:590,y:510,img:'npc-tsuki.png',talk:'Tsuki renifle la neige, puis te regarde avec ses grands yeux bleus. 🐺'},
- {id:'nala',name:'Nala',type:'dog',x:135,y:790,img:'npc-nala.png',talk:'Nala s’est installée près du chemin. Elle semble attendre une promenade. ❤️'},
- {id:'ellioth',name:'Ellioth',type:'child',x:310,y:490,img:'npc-ellioth.png',talk:'Ellioth : « Tu as vu les cadeaux ? Il paraît qu’il y en a un caché tout près du lac ! » 🎁'},
- {id:'abbygaelle',name:'Abbygaëlle',type:'child',x:455,y:535,img:'npc-abbygaelle.png',talk:'Abbygaëlle : « J’adore les lumières du village… et les surprises de Noël ! » ✨'}
+ {id:'aiko',name:'Aiko',type:'dog',x:205,y:310,img:'npc-aiko.png',talk:'Aiko remue la queue et vient réclamer une caresse. 🐾'},
+ {id:'tsuki',name:'Tsuki',type:'dog',x:565,y:285,img:'npc-tsuki.png',talk:'Tsuki renifle la neige, puis te regarde avec ses grands yeux bleus. 🐺'},
+ {id:'nala',name:'Nala',type:'dog',x:65,y:590,img:'npc-nala.png',talk:'Nala s’est installée près du chemin. Elle semble attendre une promenade. ❤️'},
+ {id:'ellioth',name:'Ellioth',type:'child',x:330,y:455,img:'npc-ellioth.png',talk:'Ellioth : « Tu as vu les cadeaux ? Il paraît qu’il y en a un caché tout près du lac ! » 🎁'},
+ {id:'abbygaelle',name:'Abbygaëlle',type:'child',x:480,y:665,img:'npc-abbygaelle.png',talk:'Abbygaëlle : « J’adore les lumières du village… et les surprises de Noël ! » ✨'}
 ];
 function renderNPCs(){const npcLayer=$('#npcLayer');npcLayer.innerHTML='';npcData.forEach(n=>{const b=document.createElement('button');b.type='button';b.id='npc-'+n.id;b.className='npc '+n.type;b.style.left=n.x+'px';b.style.top=n.y+'px';b.setAttribute('aria-label','Parler à '+n.name);b.title='Interagir avec '+n.name;const img=document.createElement('img');img.src='./assets/'+n.img;img.alt=n.name;img.draggable=false;const label=document.createElement('span');label.className='npc-label';label.textContent=n.name;const bubble=document.createElement('span');bubble.className='npc-bubble';bubble.textContent=n.talk;b.append(img,label,bubble);b.addEventListener('click',e=>{e.stopPropagation();npcLayer.querySelectorAll('.npc.talking').forEach(el=>el.classList.remove('talking'));b.classList.add('talking');$('#maptip').textContent=n.talk;window.clearTimeout(b._talkTimer);b._talkTimer=window.setTimeout(()=>b.classList.remove('talking'),4500)});npcLayer.appendChild(b)})}
 renderNPCs();
+if(preview){$('#maptip').textContent='MODE TEST : les 24 cadeaux sont accessibles. Approche-toi d’un cadeau pour le tester.';}
 const giftPos=[[135,220],[240,250],[285,360],[470,370],[620,380],[90,450],[190,500],[280,580],[460,580],[610,600],[110,700],[230,800],[365,820],[520,810],[660,820],[80,100],[250,170],[420,180],[580,160],[680,460],[170,650],[530,650],[360,240],[640,700]];
 function allowedDay(){if(preview)return 24;let n=new Date();return n.getMonth()===11?n.getDate():0}
 function camera(){let w=frame.clientWidth,h=frame.clientHeight;let scale=Math.min(w/520, h/600,1);let tx=w/2-playerPos.x*scale,ty=h/2-playerPos.y*scale;tx=Math.min(0,Math.max(w-760*scale,tx));ty=Math.min(0,Math.max(h-1040*scale,ty));world.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`}
 function renderGifts(){layer.innerHTML='';giftPos.forEach(([x,y],i)=>{let d=i+1,done=unlocked.has(d),avail=d<=allowedDay(),b=document.createElement('button');b.className='gift '+(done?'done':'')+(!avail&&!done?' locked':'')+(avail&&!done?' available':'');b.style.left=x+'px';b.style.top=y+'px';b.innerHTML=done?'✨':'🎁';b.title=`Cadeau ${d}`;b.setAttribute('aria-label',`Cadeau ${d}`);b.disabled=!avail&&!done;b.onclick=()=>{let dist=Math.hypot(playerPos.x-(x+24),playerPos.y-(y+24));if(dist<100&&d<=allowedDay()&&!unlocked.has(d)){openGift(d)}else{$('#maptip').textContent=dist<100&&unlocked.has(d)?'Ce cadeau a déjà été ouvert ✨':'Ce cadeau est plus loin. Explore avec les flèches pour t’en approcher !'}};layer.appendChild(b)});updateProgress()}
 function updateProgress(){let n=unlocked.size;$('#progressfill').style.width=(n/TOTAL*100)+'%';$('#progresslabel').textContent=`${n} / 24 cadeaux trouvés`}
-function checkNear(){let best=0,dist=9999;giftPos.forEach(([x,y],i)=>{let d=Math.hypot(playerPos.x-(x+24),playerPos.y-(y+24));if(d<dist){dist=d;best=i+1}});nearGift=dist<100&&best<=allowedDay()&&!unlocked.has(best)?best:0;$('#opennear').disabled=!nearGift;$('#opennear').textContent=nearGift?`🎁 Ouvrir le cadeau ${nearGift}`:'🎁 Aucun cadeau à proximité';$('#maptip').textContent=nearGift?'Tu es tout près d’un cadeau ! Lance le défi 🎁':'Explore le village et approche-toi des cadeaux.';layer.querySelectorAll('.gift').forEach((b,i)=>b.classList.toggle('near',nearGift===i+1));camera()}
+function checkNear(){let best=0,dist=9999;giftPos.forEach(([x,y],i)=>{let d=Math.hypot(playerPos.x-(x+24),playerPos.y-(y+24));if(d<dist){dist=d;best=i+1}});nearGift=dist<100&&best<=allowedDay()&&!unlocked.has(best)?best:0;$('#opennear').disabled=!nearGift;$('#opennear').textContent=nearGift?`🎁 Ouvrir le cadeau ${nearGift}`:'🎁 Aucun cadeau à proximité';$('#maptip').textContent=nearGift?'Tu es tout près d’un cadeau ! Lance le défi 🎁':(preview?'MODE TEST : cadeaux ouverts au test. Approche-toi des cadeaux.':'Explore le village et approche-toi des cadeaux.');layer.querySelectorAll('.gift').forEach((b,i)=>b.classList.toggle('near',nearGift===i+1));camera()}
 // Déplacement continu : le personnage avance progressivement, sans téléportations par pas.
 const moveState={up:false,down:false,left:false,right:false};let movementRAF=0,lastMoveTime=0;
 function currentDir(){if(moveState.left)return 'left';if(moveState.right)return 'right';if(moveState.up)return 'up';if(moveState.down)return 'down';return null}
