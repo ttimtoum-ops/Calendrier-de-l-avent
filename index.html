@@ -83,6 +83,25 @@
 #giftlayer .gift.near{outline:4px solid #fff!important;outline-offset:4px}
 .landmark{color:#416b86;text-shadow:0 2px 0 white,0 0 8px white}
 
+
+/* V12 — full illustrated RPG village backdrop */
+.mapframe{border:2px solid #9bd9f2;box-shadow:0 0 0 4px #17354d,0 24px 70px #0008,inset 0 0 0 1px #fff7d766;border-radius:28px;background:#10223a}
+.world{background:#0d2139 url('./assets/village-rpg.webp') center center/100% 100% no-repeat!important;}
+.world:before{opacity:.2!important;background-image:radial-gradient(#fff 1px,transparent 2px)!important;background-size:31px 38px!important;animation:snowfall 18s linear infinite!important;pointer-events:none}
+/* The illustrated map replaces the former geometric CSS scenery; keep only gameplay overlays. */
+.world>.moon,.world>.mountain,.world>.snowground,.world>.pathway,.world>.pathbranch,.world>.pond,.world>.building,.world>.tree,.world>.landmark,.world>.bridge{display:none!important}
+.maptip{background:linear-gradient(135deg,#162d49e8,#10253be0)!important;border-color:#b8e8ff55!important;box-shadow:0 5px 20px #06111d66;color:#fff!important;letter-spacing:.01em}
+#giftlayer .gift{border-radius:11px!important;border-width:2px!important;box-shadow:0 8px 18px #091b2c88,inset 0 2px 3px #ffffff75,inset 0 -5px 10px #0002!important}
+#giftlayer .gift:after{border-radius:3px!important;box-shadow:0 0 8px #ffefb855}
+#giftlayer .gift:before{filter:drop-shadow(0 1px 2px #573c20)!important}
+#giftlayer .gift.available{animation:v12PresentGlow 1.7s ease-in-out infinite!important}
+@keyframes v12PresentGlow{0%,100%{transform:translateY(0) scale(1);box-shadow:0 0 0 2px #fff7dc,0 0 15px #ffd97899,inset 0 2px 3px #ffffff75!important}50%{transform:translateY(-4px) scale(1.08);box-shadow:0 0 0 4px #fff9df,0 0 26px #ffe28dcc,inset 0 2px 3px #ffffff75!important}}
+#giftlayer .gift.near{outline:4px solid #fff!important;outline-offset:4px;filter:brightness(1.22)!important}
+.controls .control{background:linear-gradient(145deg,#274767,#17304b)!important;border:1px solid #a9dcf477!important;box-shadow:0 5px 0 #0b1b2c,0 6px 14px #0004!important}
+.controls .control:active{transform:translateY(2px);box-shadow:0 2px 0 #0b1b2c!important}
+.status{background:linear-gradient(145deg,#1c3655,#12263d)!important;border-color:#a8d8ef33!important;box-shadow:0 12px 30px #07132355}
+@media(max-width:520px){.mapframe{border-radius:21px}}
+
 </style></head><body><main class="app"><div class="topbar"><div class="brand">❄ L'hiver de notre amour</div><div class="top-actions"><button class="smallbtn" id="reset">↻ Réinitialiser</button><button class="smallbtn" id="help">?</button></div></div>
 <header class="hero"><div class="eyebrow">Une aventure de Noël rien qu'à toi</div><h1>Le village enchanté</h1><p>Explore les chemins enneigés, approche-toi des cadeaux et relève les défis pour découvrir tes surprises. ❤️</p><div class="progressbox"><div class="progress"><div id="progressfill"></div></div><div class="progresslabel" id="progresslabel">0 / 24 cadeaux trouvés</div></div></header>
 <section class="mapframe" id="mapframe"><div class="mapviewport"><div class="world" id="world"><div class="moon"></div><div class="mountain m1"></div><div class="mountain m2"></div><div class="mountain m3"></div><div class="snowground"></div><div class="pathway"></div><div class="pathbranch"></div><div class="pathbranch b2"></div><div class="pond"></div><div class="building baker"><i class="win w1"></i><i class="win w2"></i></div><div class="building shop"><i class="win w1"></i><i class="win w2"></i></div><div class="building cabin"><i class="win w1"></i><i class="win w2"></i></div><div class="building housefour"><i class="win w1"></i><i class="win w2"></i></div><div class="building cottage"><i class="win w1"></i><i class="win w2"></i></div><div class="tree t1">🎄</div><div class="tree t2">🎄</div><div class="tree t3">🎄</div><div class="tree t4">🎄</div><div class="tree t5">🎄</div><div class="tree t6">🎄</div><div class="tree t7">🎄</div><div class="tree t8">🎄</div><div class="tree t9">🎄</div><div class="tree t10">🎄</div><div class="landmark plaza">✨ PLACE DU SAPIN ✨</div><div class="bridge"></div><div id="giftlayer"></div><div class="player dir-down" id="player" aria-label="Personnage"><img id="player-sprite" alt="" draggable="false"></div></div></div><div class="maptip" id="maptip">Déplace-toi avec les flèches. Approche un cadeau puis touche « Ouvrir ».</div></section>
