@@ -50,6 +50,39 @@
 .landmark{color:#47718b;text-shadow:0 2px #fff,0 0 7px #fff}
 @media(max-width:390px){.gift{width:43px;height:43px}}
 
+/* V11 REAL VISUAL PASS: more saturated village palette, layered scenery, robust disabled gift styling */
+:root{--gold:#ffe6a6;--cream:#fffaf0;--night:#081528;--panel:#172b43}
+.hero h1{color:#ffdf92;text-shadow:0 4px 0 #624b37,0 0 24px #ffd87b88}
+.mapframe{border:2px solid #89c8e7;box-shadow:0 22px 55px #07142688, inset 0 0 0 3px #fff2c522}
+.world{background:linear-gradient(180,#102746 0%,#214b69 26%,#9cc9e2 31%,#dceef5 40%,#f2f8f8 100%)}
+.world:before{opacity:.38;background-image:radial-gradient(#fff 1.5px,transparent 2px),radial-gradient(#d6f2ff 1px,transparent 2px);background-size:33px 37px,51px 49px;background-position:0 0,13px 21px}
+.world:after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;background:radial-gradient(ellipse at 50% 23%,#79d8ff22,transparent 44%),radial-gradient(ellipse at 18% 65%,#b3e5ff22,transparent 30%),linear-gradient(90deg,#071a2b30,transparent 16%,transparent 84%,#071a2b30)}
+.moon{width:82px;height:82px;top:46px;right:118px;background:radial-gradient(circle at 32% 30%,#fffef1,#ffedb8 64%,#e9c971);box-shadow:0 0 26px #fff3be,0 0 75px #ffefb955,0 0 120px #ffe7a022}
+.mountain{border-bottom-color:#b6d8eb;filter:drop-shadow(0 12px 8px #142e4555)}.mountain.m2{border-bottom-color:#8fb9d5}.mountain.m3{border-bottom-color:#d5e8f3}
+.snowground{background:radial-gradient(ellipse at 50% 10%,#fff 0%,#f5fbff 52%,#d4e8f2 100%);box-shadow:inset 0 22px 38px #9ec6da33}
+.pathway,.pathbranch{background:linear-gradient(145deg,#fffefb 0%,#f4f8f4 56%,#e1ebed 100%);filter:drop-shadow(0 12px 10px #547d9935)}
+.pathway:after{content:"";position:absolute;inset:0;background-image:radial-gradient(#b8d0d9 1px,transparent 2px);background-size:25px 29px;opacity:.23}
+.pond{background:radial-gradient(ellipse at 28% 24%,#e2fbff 0%,#b8eafa 26%,#7cc7e4 59%,#4b9fc6 100%);border-color:#f9ffff;box-shadow:inset 0 0 22px #2d84b044,0 7px 20px #477e9a44}
+.building{background:linear-gradient(90deg,#76513d,#a77b5d 48%,#855943);border-color:#ffedc9;box-shadow:0 15px 22px #23384c44,inset 0 0 0 2px #fff4d822}
+.building:before{border-bottom-color:#c34e5b;filter:drop-shadow(0 9px 4px #243c4d55)}.building:after{background:linear-gradient(90,#49342a,#69483a);box-shadow:inset 2px 0 #a37b62}
+.building .win{background:linear-gradient(145deg,#fff9cc,#ffc64f);border-color:#fff8dc;box-shadow:0 0 9px #ffe87d,0 0 27px #ffd55eaa}
+.baker:before{border-bottom-color:#db905f}.shop:before{border-bottom-color:#4e997c}.cabin:before{border-bottom-color:#886cb0}.housefour:before{border-bottom-color:#69a88c}.cottage:before{border-bottom-color:#b66e63}
+.tree{filter:drop-shadow(0 8px 6px #19394e66)}.tree:after{content:"✨";position:absolute;left:29px;top:18px;font-size:18px;animation:v11Spark 2.1s ease-in-out infinite alternate;filter:drop-shadow(0 0 6px #ffe9a8)}@keyframes v11Spark{to{opacity:.42;transform:scale(.7)}}
+.bridge{background:linear-gradient(#c39470,#956542);box-shadow:0 7px 0 #6c4c36,0 11px 18px #29445933}
+/* Explicit styling of disabled buttons fixes native grey button rendering on browsers */
+#giftlayer .gift,#giftlayer .gift:disabled,#giftlayer .gift[disabled]{appearance:none;-webkit-appearance:none;opacity:1!important;color:#fff!important;-webkit-text-fill-color:#fff!important;filter:none!important;cursor:pointer!important;border:2px solid #fff4d3!important;border-radius:12px!important;background-color:#b94d64!important;box-shadow:0 7px 15px #263c5166,inset 0 2px 4px #ffffff55!important}
+#giftlayer .gift:nth-child(3n+1),#giftlayer .gift:nth-child(3n+1):disabled{background-image:linear-gradient(90deg,transparent 37%,#ffe18d 37%,#ffe18d 61%,transparent 61%),linear-gradient(145deg,#ff9db1,#b53b58)!important}
+#giftlayer .gift:nth-child(3n+2),#giftlayer .gift:nth-child(3n+2):disabled{background-image:linear-gradient(90deg,transparent 37%,#ffe18d 37%,#ffe18d 61%,transparent 61%),linear-gradient(145deg,#9be4ff,#3284b6)!important}
+#giftlayer .gift:nth-child(3n),#giftlayer .gift:nth-child(3n):disabled{background-image:linear-gradient(90deg,transparent 37%,#ffe18d 37%,#ffe18d 61%,transparent 61%),linear-gradient(145deg,#a0e7bb,#368a61)!important}
+#giftlayer .gift:after{width:9px!important;left:calc(50% - 4.5px)!important;background:linear-gradient(90,#f4ce6e,#fff0b0,#e2b54e)!important;opacity:1!important}
+#giftlayer .gift:before{content:"";position:absolute;width:22px;height:9px;left:calc(50% - 11px);top:-5px;border:3px solid #ffe6a5;border-radius:50% 50% 4px 4px;z-index:2;box-shadow:0 0 5px #fff2c6;background:transparent}
+#giftlayer .gift.locked:before{content:"🔒";left:auto;top:auto;right:-7px;bottom:-8px;width:auto;height:auto;border:0;border-radius:0;font-size:13px;box-shadow:none;background:none}
+#giftlayer .gift.done{background-image:linear-gradient(90deg,transparent 37%,#fff0b0 37%,#fff0b0 61%,transparent 61%),linear-gradient(145deg,#ffeeb5,#ca9033)!important}
+#giftlayer .gift.available{animation:v11GiftPulse 1.55s ease-in-out infinite;box-shadow:0 0 0 3px #fff5d6,0 0 28px #ffe69c!important}
+@keyframes v11GiftPulse{50%{transform:translateY(-3px) scale(1.07);filter:brightness(1.18)}}
+#giftlayer .gift.near{outline:4px solid #fff!important;outline-offset:4px}
+.landmark{color:#416b86;text-shadow:0 2px 0 white,0 0 8px white}
+
 </style></head><body><main class="app"><div class="topbar"><div class="brand">❄ L'hiver de notre amour</div><div class="top-actions"><button class="smallbtn" id="reset">↻ Réinitialiser</button><button class="smallbtn" id="help">?</button></div></div>
 <header class="hero"><div class="eyebrow">Une aventure de Noël rien qu'à toi</div><h1>Le village enchanté</h1><p>Explore les chemins enneigés, approche-toi des cadeaux et relève les défis pour découvrir tes surprises. ❤️</p><div class="progressbox"><div class="progress"><div id="progressfill"></div></div><div class="progresslabel" id="progresslabel">0 / 24 cadeaux trouvés</div></div></header>
 <section class="mapframe" id="mapframe"><div class="mapviewport"><div class="world" id="world"><div class="moon"></div><div class="mountain m1"></div><div class="mountain m2"></div><div class="mountain m3"></div><div class="snowground"></div><div class="pathway"></div><div class="pathbranch"></div><div class="pathbranch b2"></div><div class="pond"></div><div class="building baker"><i class="win w1"></i><i class="win w2"></i></div><div class="building shop"><i class="win w1"></i><i class="win w2"></i></div><div class="building cabin"><i class="win w1"></i><i class="win w2"></i></div><div class="building housefour"><i class="win w1"></i><i class="win w2"></i></div><div class="building cottage"><i class="win w1"></i><i class="win w2"></i></div><div class="tree t1">🎄</div><div class="tree t2">🎄</div><div class="tree t3">🎄</div><div class="tree t4">🎄</div><div class="tree t5">🎄</div><div class="tree t6">🎄</div><div class="tree t7">🎄</div><div class="tree t8">🎄</div><div class="tree t9">🎄</div><div class="tree t10">🎄</div><div class="landmark plaza">✨ PLACE DU SAPIN ✨</div><div class="bridge"></div><div id="giftlayer"></div><div class="player dir-down" id="player" aria-label="Personnage"><img id="player-sprite" alt="" draggable="false"></div></div></div><div class="maptip" id="maptip">Déplace-toi avec les flèches. Approche un cadeau puis touche « Ouvrir ».</div></section>
