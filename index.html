@@ -3,7 +3,7 @@
 <meta name="theme-color" content="#0b1525"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><title>L'hiver de notre amour</title>
 <style>
 
-/* V18: true viewport layout (desktop + iPhone), no page scroll for the game */
+/* V19: true fullscreen immersive layout; map fills viewport and HUD overlays */
 html,body{width:100%;height:100%;height:100dvh;margin:0;overflow:hidden}
 body{min-height:0}
 .app{width:100%;max-width:none;height:100dvh;min-height:0;margin:0;padding:calc(5px + env(safe-area-inset-top)) 8px calc(6px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:0;overflow:hidden}
@@ -177,6 +177,32 @@ body{min-height:0}
 #npcLayer .npc:before{bottom:2px!important;height:8px!important;background:rgba(15,29,42,.34)!important;filter:blur(3px)!important}
 #npcLayer .npc.dog{width:68px!important;height:66px!important}
 #npcLayer .npc.child{width:46px!important;height:78px!important}
+
+/* V19: fullscreen game canvas with compact HUD overlays */
+html,body{width:100%;height:100%;height:100dvh;margin:0;padding:0;overflow:hidden!important}
+body{min-height:0!important}
+.app{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;max-width:none!important;min-height:0!important;margin:0!important;padding:0!important;display:block!important;overflow:hidden!important}
+.mapframe{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+.mapviewport{position:absolute!important;inset:0!important}
+.topbar{position:absolute!important;z-index:20;top:calc(4px + env(safe-area-inset-top))!important;left:8px!important;right:8px!important;padding:4px!important;align-items:center!important;gap:4px!important}
+.brand{font-size:clamp(.75rem,2.5vw,1rem)!important;text-shadow:0 2px 5px #0009}
+.top-actions{gap:4px!important}
+.smallbtn{padding:7px 9px!important;font-size:.68rem!important;background:#10233dcc!important;backdrop-filter:blur(5px)}
+.hero{position:absolute!important;z-index:20;top:calc(44px + env(safe-area-inset-top))!important;left:8px!important;right:8px!important;text-align:center!important;padding:4px 8px!important;pointer-events:none;text-shadow:0 2px 5px #10233c}
+.hero h1{font-size:clamp(1.15rem,4.5vw,2rem)!important;margin:3px 0!important}
+.hero p{font-size:clamp(.65rem,2vw,.78rem)!important;max-width:520px!important}
+.eyebrow{font-size:.56rem!important}
+.progressbox{max-width:min(300px,70vw)!important;margin:5px auto 0!important}
+.progresslabel{font-size:.65rem!important;text-shadow:0 2px 5px #10233c}
+.controls{position:absolute!important;z-index:22;left:50%!important;bottom:calc(12px + env(safe-area-inset-bottom))!important;transform:translateX(-50%);margin:0!important;grid-template-columns:repeat(3,48px)!important;grid-template-rows:repeat(2,42px)!important;gap:4px!important}
+.control{background:#12243dcc!important;backdrop-filter:blur(6px);border:1px solid #ffffff55!important}
+.actionbar{position:absolute!important;z-index:22;left:50%!important;bottom:calc(106px + env(safe-area-inset-bottom))!important;transform:translateX(-50%);margin:0!important;white-space:nowrap}
+.actionbtn{padding:9px 15px!important;font-size:.82rem!important}
+.maptip{top:auto!important;bottom:calc(198px + env(safe-area-inset-bottom))!important;left:8px!important;right:8px!important;font-size:.68rem!important;padding:6px 8px!important;max-width:520px;margin:auto}
+.status,.bottomnote{display:none!important}
+.gift-number{display:flex!important;visibility:visible!important;opacity:1!important}
+@media(max-width:520px){.topbar{left:3px!important;right:3px!important}.smallbtn{padding:5px 6px!important;font-size:.62rem!important}.brand{font-size:.76rem!important}.hero{top:calc(40px + env(safe-area-inset-top))!important}.hero h1{font-size:1.28rem!important}.hero p{font-size:.65rem!important;max-width:94vw}.progressbox{max-width:68vw!important}.controls{bottom:calc(8px + env(safe-area-inset-bottom))!important;grid-template-columns:repeat(3,44px)!important;grid-template-rows:repeat(2,38px)!important}.actionbar{bottom:calc(94px + env(safe-area-inset-bottom))!important}.maptip{bottom:calc(180px + env(safe-area-inset-bottom))!important}}
+
 </style></head><body><main class="app"><div class="topbar"><div class="brand">❄ L'hiver de notre amour</div><div class="top-actions"><button class="smallbtn" id="testtoggle">🧪 Mode test</button><button class="smallbtn" id="reset">↻ Réinitialiser</button><button class="smallbtn" id="help">?</button></div></div>
 <header class="hero"><div class="eyebrow">Une aventure de Noël rien qu'à toi</div><h1>Le village enchanté</h1><p>Explore les chemins enneigés, approche-toi des cadeaux et relève les défis pour découvrir tes surprises. ❤️</p><div class="progressbox"><div class="progress"><div id="progressfill"></div></div><div class="progresslabel" id="progresslabel">0 / 24 cadeaux trouvés</div></div></header>
 <section class="mapframe" id="mapframe"><div class="mapviewport"><div class="world" id="world"><div id="giftlayer"></div><div id="npcLayer" aria-label="Habitants du village"></div><div class="player dir-down" id="player" aria-label="Personnage"><img id="player-sprite" alt="" draggable="false"></div></div></div><div class="maptip" id="maptip">Déplace-toi avec les flèches. Approche un cadeau puis touche « Ouvrir ».</div></section>
@@ -207,8 +233,8 @@ function updateTestToggle(){if(testToggle){testToggle.textContent=preview?'🧪 
 if(testToggle){testToggle.addEventListener('click',()=>{preview=!preview;const u=new URL(location.href);if(preview)u.searchParams.set('preview','1');else u.searchParams.delete('preview');history.replaceState({},'',u);updateTestToggle();renderGifts();checkNear();$('#maptip').textContent=preview?'MODE TEST activé : les 24 cadeaux sont accessibles.':'Mode normal : cadeaux selon la date.';});updateTestToggle();}
 if(preview){$('#maptip').textContent='MODE TEST : les 24 cadeaux sont accessibles. Approche-toi d’un cadeau pour le tester.';}
 const giftPos=[[135,220],[240,250],[285,360],[470,370],[620,380],[90,450],[190,500],[280,580],[460,580],[610,600],[110,700],[230,800],[365,820],[520,810],[660,820],[80,100],[250,170],[420,180],[580,160],[680,460],[170,650],[530,650],[360,240],[640,700]];
-function allowedDay(){if(preview)return 24;let n=new Date();return n.getFullYear()===2026&&n.getMonth()===11?n.getDate():0}
-function camera(){let w=frame.clientWidth,h=frame.clientHeight;let scale=Math.min(w/520, h/600,1);let tx=w/2-playerPos.x*scale,ty=h/2-playerPos.y*scale;tx=Math.min(0,Math.max(w-760*scale,tx));ty=Math.min(0,Math.max(h-1040*scale,ty));world.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`}
+function allowedDay(){if(preview)return 24;const now=new Date();if(now.getFullYear()<2026|| (now.getFullYear()===2026&&now.getMonth()<11))return 0;if(now.getFullYear()!==2026||now.getMonth()!==11)return 0;return Math.max(0,Math.min(24,now.getDate()))}
+function camera(){let w=frame.clientWidth,h=frame.clientHeight;let scale=Math.max(w/760,h/1040);let tx=w/2-playerPos.x*scale,ty=h/2-playerPos.y*scale;tx=Math.min(0,Math.max(w-760*scale,tx));ty=Math.min(0,Math.max(h-1040*scale,ty));world.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`}
 function renderGifts(){layer.innerHTML='';giftPos.forEach(([x,y],i)=>{let d=i+1,done=unlocked.has(d),avail=d<=allowedDay(),b=document.createElement('button');b.className='gift '+(done?'done':'')+(!avail&&!done?' locked':'')+(avail&&!done?' available':'');b.style.left=x+'px';b.style.top=y+'px';b.style.zIndex=String(10+Math.floor((y+48)/10));b.innerHTML=(done?'✨':'🎁')+`<span class=\"gift-number\">${d}</span>`;b.title=`Cadeau ${d} · ${d} décembre 2026`;b.setAttribute('aria-label',`Cadeau ${d}`);b.disabled=!avail&&!done;b.onclick=()=>{let dist=Math.hypot(playerPos.x-(x+24),playerPos.y-(y+24));if(dist<100&&d<=allowedDay()&&!unlocked.has(d)){openGift(d)}else{$('#maptip').textContent=dist<100&&unlocked.has(d)?'Ce cadeau a déjà été ouvert ✨':'Ce cadeau est plus loin. Explore avec les flèches pour t’en approcher !'}};layer.appendChild(b)});updateProgress()}
 function updateProgress(){let n=unlocked.size;$('#progressfill').style.width=(n/TOTAL*100)+'%';$('#progresslabel').textContent=`${n} / 24 cadeaux trouvés`}
 function checkNear(){let best=0,dist=9999;giftPos.forEach(([x,y],i)=>{let d=Math.hypot(playerPos.x-(x+24),playerPos.y-(y+24));if(d<dist){dist=d;best=i+1}});nearGift=dist<100&&best<=allowedDay()&&!unlocked.has(best)?best:0;$('#opennear').disabled=!nearGift;$('#opennear').textContent=nearGift?`🎁 Ouvrir le cadeau ${nearGift}`:'🎁 Aucun cadeau à proximité';$('#maptip').textContent=nearGift?'Tu es tout près d’un cadeau ! Lance le défi 🎁':(preview?'MODE TEST : cadeaux ouverts au test. Approche-toi des cadeaux.':'Explore le village et approche-toi des cadeaux.');layer.querySelectorAll('.gift').forEach((b,i)=>b.classList.toggle('near',nearGift===i+1));camera()}
